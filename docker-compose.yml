@@ -1,0 +1,58 @@
+services:
+  # MLflow tracking server
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.9.2
+    container_name: diabetes-mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./mlartifacts:/mlflow/mlartifacts
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri file:///mlflow/mlruns --default-artifact-root file:///mlflow/mlartifacts
+    networks:
+      - mlops-net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:5000/health\")' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # Training service (waits for MLflow)
+  training:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: diabetes-training
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./mlruns:/app/mlruns
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    command: python src/train.py --name docker-run
+    networks:
+      - mlops-net
+    depends_on:
+      mlflow:
+        condition: service_healthy
+
+  # API service (v1)
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: diabetes-api-v1
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+    environment:
+      - MODEL_PATH=/app/models/baseline.pkl
+      - MODEL_VERSION=v1
+    networks:
+      - mlops-net
+
+networks:
+  mlops-net:
+    driver: bridge
