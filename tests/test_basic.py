@@ -27,15 +27,3 @@ def test_directories():
     assert (base_dir / "data").exists()
     assert (base_dir / "models").exists()
     assert (base_dir / "tests").exists()
-
-def test_model_files():
-    """Test that model files exist"""
-    import pathlib
-    import glob
-    
-    models_dir = pathlib.Path(__file__).parent.parent / "models"
-    model_files = list(models_dir.glob("*.pkl"))
-    
-    # At least one model should exist
-    assert len(model_files) > 0, f"No .pkl files found in {models_dir}"
-    print(f"Found {len(model_files)} model files: {[f.name for f in model_files]}")

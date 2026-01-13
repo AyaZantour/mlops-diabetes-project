@@ -40,7 +40,7 @@ mlops-diabetes-project/
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/mlops-diabetes-project.git
+git clone https://github.com/AyaZantour/mlops-diabetes-project.git
 cd mlops-diabetes-project
 ```
 
@@ -241,10 +241,8 @@ curl -X POST "http://localhost:8000/predict" \
 
 ## 👤 Author
 
-**Your Name**
 - GitHub: [@AyaZantour](https://github.com/AyaZantour)
 - Project: [mlops-diabetes-project](https://github.com/AyaZantour/mlops-diabetes-project)
 
-## 📄 License
 
-MIT License - see LICENSE file for details.
+
