@@ -1,0 +1,7 @@
+[core]
+    remote = myremote
+['remote "azure"']
+    url = azure://dvc-storage/dvcstore
+    connection_string = DefaultEndpointsProtocol=https
+['remote "myremote"']
+    url = C:/Users/TOSHIBA/AppData/Local/Temp/dvc-storage
