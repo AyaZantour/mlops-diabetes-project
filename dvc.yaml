@@ -1,0 +1,33 @@
+stages:
+  load_data:
+    cmd: python -c "from src.train import load_and_save_data; load_and_save_data()"
+    deps:
+      - src/train.py
+      - src/config.py
+    outs:
+      - data/raw/diabetes.csv
+
+  prepare_data:
+    cmd: python -c "from src.train import prepare_data; prepare_data()"
+    deps:
+      - data/raw/diabetes.csv
+      - src/train.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train_model:
+    cmd: python src/train.py --name baseline
+    deps:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - src/train.py
+      - src/config.py
+    params:
+      - src/config.py:
+          - DEFAULT_PARAMS
+    outs:
+      - models/baseline.pkl
+    metrics:
+      - mlruns/:
+          cache: false
