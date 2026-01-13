@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Data & Models (DVC will track)
+data/raw/*.csv
+data/processed/*.csv
+models/*.pkl
+models/*.joblib
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# ZenML
+.zen/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# DVC
+.dvc/cache
+.dvc/tmp
